@@ -7,7 +7,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class ProcessDto {
+public class ProcessGlobalDto {
 
     private Object userData;
     private Object input;

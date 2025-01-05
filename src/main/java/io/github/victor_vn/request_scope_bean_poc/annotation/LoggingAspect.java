@@ -1,6 +1,6 @@
 package io.github.victor_vn.request_scope_bean_poc.annotation;
 
-import io.github.victor_vn.request_scope_bean_poc.domain.ProcessDto;
+import io.github.victor_vn.request_scope_bean_poc.domain.ProcessGlobalDto;
 import io.github.victor_vn.request_scope_bean_poc.feign.PlaceholderFeignClient;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
@@ -18,11 +18,11 @@ import java.lang.reflect.Method;
 public class LoggingAspect {
 
     private PlaceholderFeignClient feignClient;
-    private ProcessDto processDto;
+    private ProcessGlobalDto processGlobalDto;
 
-    public LoggingAspect(PlaceholderFeignClient feignClient, ProcessDto processDto) {
+    public LoggingAspect(PlaceholderFeignClient feignClient, ProcessGlobalDto processGlobalDto) {
         this.feignClient = feignClient;
-        this.processDto = processDto;
+        this.processGlobalDto = processGlobalDto;
     }
 
     @Before("@within(io.github.victor_vn.request_scope_bean_poc.annotation.EnablePrePosHandling) || @annotation(io.github.victor_vn.request_scope_bean_poc.annotation.EnablePrePosHandling)")
@@ -39,13 +39,13 @@ public class LoggingAspect {
         HttpServletRequest request = attributes.getRequest();
 
         System.out.println("Initializing process DTO");
-        processDto.setInput(request.getParameter("value"));
+        processGlobalDto.setInput(request.getParameter("value"));
 
         if (annotation != null) {
             System.out.println("Fetching external system");
-            processDto.setUserData(feignClient.getUserInfo(Integer.parseInt(request.getParameter("value"))).getTitle());
+            processGlobalDto.setUserData(feignClient.getUserInfo(Integer.parseInt(request.getParameter("value"))).getTitle());
 
-            System.out.println("Ending PreAction userData: " + processDto.getUserData());
+            System.out.println("Ending PreAction userData: " + processGlobalDto.getUserData());
         }
     }
 
@@ -54,7 +54,7 @@ public class LoggingAspect {
         Class<?> targetClass = joinPoint.getTarget().getClass();
         EnablePrePosHandling annotation = targetClass.getAnnotation(EnablePrePosHandling.class);
         if (annotation != null) {
-            System.out.println("Ending PostAction - OutputAfterTransformation: " + processDto.getOutput());
+            System.out.println("Ending PostAction - OutputAfterTransformation: " + processGlobalDto.getOutput());
         }
     }
 
