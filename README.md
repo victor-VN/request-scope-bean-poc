@@ -13,3 +13,8 @@ tests and no data leak occur between requests
 ## Tests
 
 ## Conclusion
+
+## Sources
+
+- _Visited:_ 2025-01-05 - [Quick Guide to Spring Bean Scopes](https://www.baeldung.com/spring-bean-scopes)
+- _Visited:_ 2025-01-05 - [Bean Scopes](https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html)
