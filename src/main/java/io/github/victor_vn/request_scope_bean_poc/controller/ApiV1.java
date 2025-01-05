@@ -1,9 +1,10 @@
 package io.github.victor_vn.request_scope_bean_poc.controller;
 
 
-import io.github.victor_vn.request_scope_bean_poc.annotation.CustomAnnotation;
-import io.github.victor_vn.request_scope_bean_poc.domain.Product;
+import io.github.victor_vn.request_scope_bean_poc.annotation.EnablePrePosHandling;
+import io.github.victor_vn.request_scope_bean_poc.domain.ProcessDto;
 import io.github.victor_vn.request_scope_bean_poc.domain.TestSingleton;
+import io.github.victor_vn.request_scope_bean_poc.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-@CustomAnnotation(value = "ent", number = 1)
+@EnablePrePosHandling
 public class ApiV1 {
-
-    private static final Logger logger = LoggerFactory.getLogger(ApiV1.class);
     @Autowired
-    Product product;
+    ProcessDto processDto;
+
+    @Autowired
+    UserService service;
 
     @Autowired
     TestSingleton singleton;
 
     @GetMapping
     public ResponseEntity<String> getInfo(@RequestParam String value){
-        logger.info("Produto: {}", product);
-        logger.info("Singleton: {}", singleton);
-        return ResponseEntity.ok("Value is: " + value);
+        service.processDto();
+        return ResponseEntity.ok("Value is: " + processDto.getOutput());
+    }
+
+    @GetMapping("/not")
+    public ResponseEntity<String> notAnnotaded(@RequestParam String value){
+        return ResponseEntity.ok("not annotaded endpoint");
     }
 }
